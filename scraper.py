@@ -33,6 +33,7 @@ class TiktokScraper(webdriver.Chrome):
         clear.click()
 
         region_list.click()
+        time.sleep(2)
         self.click_from_list(filters["Region"])
 
         # find industry list
@@ -80,21 +81,26 @@ class TiktokScraper(webdriver.Chrome):
         ads = self.find_elements(By.CLASS_NAME, "card-wrapper--7EOxZ")
 
         with open("ads.json", "w") as file:
+
             adds_dict = {}
             adds_dict["filters"] = filters
+            adds_dict["ads"] = []
             adds_dict["links"] = []
+
             for i, ad in enumerate(ads, start=1):
+
                 print("collecting ad", i)
                 ad.click()
                 self.switch_to.window(self.window_handles[1])
                 time.sleep(3)
-                adds_dict["ad"+str(i)] = {}
+
+                ad_ = {}
                 info = self.find_elements(
                     By.CLASS_NAME, "info-content--kqx-4")[3:]
-                adds_dict["ad"+str(i)]["Source"] = info[0].text
-                adds_dict["ad"+str(i)]["Likes"] = info[1].text
-                adds_dict["ad"+str(i)]["Comments"] = info[2].text
-                adds_dict["ad"+str(i)]["Shares"] = info[3].text
+                ad_["Source"] = info[0].text
+                ad_["Likes"] = info[1].text
+                ad_["Comments"] = info[2].text
+                ad_["Shares"] = info[3].text
 
                 for idx, key in enumerate(["CVR", "CTR", "Clicks", "Conversions", "Remains"]):
                     button = self.find_element(
@@ -104,10 +110,12 @@ class TiktokScraper(webdriver.Chrome):
                     button.click()
                     time.sleep(2)
 
-                    adds_dict["ad"+str(i)][key] = \
+                    ad_[key] = \
                         self.find_element(
                         By.CSS_SELECTOR,
                         "span[class='labelBlackKey']").text + " of the industry average"
+
+                adds_dict["ads"].append(ad_)
 
                 # get video link
                 video = self.find_element(By.CSS_SELECTOR, 'video')
