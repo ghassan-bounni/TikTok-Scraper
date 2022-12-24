@@ -1,6 +1,6 @@
 # TikTok Scraper
 
-Tiktok Scraper is a bot built with selenium that scrapes info from Tiktok Ads.
+Tiktok Scraper is a bot built with selenium that scrapes info from [Tiktok Ads](https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en?region=LB).
 
 ## Installation
 
