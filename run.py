@@ -16,7 +16,7 @@ for arg in arg_list:
 
 args = parser.parse_args()
 
-# reqiered filters
+#  required filters
 filters = {
     "Region": args.region,
     "Industry": args.industry,
