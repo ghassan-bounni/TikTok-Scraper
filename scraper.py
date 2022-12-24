@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import json
+import constants as const
 
 
 class TiktokScraper(webdriver.Chrome):
@@ -20,8 +21,7 @@ class TiktokScraper(webdriver.Chrome):
             return super().__exit__(exc_type, exc, traceback)
 
     def land_page(self):
-        self.get(
-            "https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en")
+        self.get(const.BASE_URL)
 
     def filter_ads(self, filters):
         time.sleep(3)
@@ -97,10 +97,9 @@ class TiktokScraper(webdriver.Chrome):
                 ad_ = {}
                 info = self.find_elements(
                     By.CLASS_NAME, "info-content--kqx-4")[3:]
-                ad_["Source"] = info[0].text
-                ad_["Likes"] = info[1].text
-                ad_["Comments"] = info[2].text
-                ad_["Shares"] = info[3].text
+
+                ad_.update({key: value.txt for key, value in zip(
+                    ["Source", "Likes", "Comments", "Shares"], info)})
 
                 for idx, key in enumerate(["CVR", "CTR", "Clicks", "Conversions", "Remains"]):
                     button = self.find_element(
